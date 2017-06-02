@@ -17,3 +17,32 @@
 #                password: 'abc123',
 #                password_confirmation: nil)
 # end
+
+
+
+  Race.create([
+        {
+          name: 'Half',
+          distance: 13.1,
+          time: 237128,
+          race_day:'2017-02-02',
+          location: 'Newton',
+          user_id: 1
+        },
+        {
+          name: 'Full',
+          distance: 13.1,
+          time: 237128,
+          race_day:'2017-03-01',
+          location: 'Newton',
+          user_id: 1
+        },
+        {
+          name: 'Half',
+          distance: 13.1,
+          time: 237128,
+          race_day: '2017-08-10',
+          location: 'Newton',
+          user_id: 1
+        },
+    ])
