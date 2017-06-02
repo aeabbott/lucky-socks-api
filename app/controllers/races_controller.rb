@@ -1,9 +1,9 @@
-class RacesController < ApplicationController
+class RacesController < OpenReadController
   before_action :set_race, only: [:show, :update, :destroy]
 
   # GET /races
   def index
-    @races = Race.all
+    @races = current_user.races
 
     render json: @races
   end
@@ -15,7 +15,7 @@ class RacesController < ApplicationController
 
   # POST /races
   def create
-    @race = Race.new(race_params)
+    @race = current_user.races.build(race_params)
 
     if @race.save
       render json: @race, status: :created, location: @race
