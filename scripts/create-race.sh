@@ -13,7 +13,7 @@ curl "${API}${URL_PATH}" \
       "name": "Race Name",
       "distance":"13.1",
       "time": "183921",
-      "run_date":"2017-02-15",
+      "race_day":"2017-02-15",
       "location":"race location"
     }
   }'

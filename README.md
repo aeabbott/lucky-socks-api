@@ -2,7 +2,10 @@
 
 # rails-api-template
 
-
+## ERD
+link to ERD:
+http://imgur.com/a/Du2le
+1. dotted line represents R1 
 ## Dependencies
 
 Install with `bundle install`.
