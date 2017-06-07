@@ -3,7 +3,7 @@ class RacesController < OpenReadController
 
   # GET /races
   def index
-    @races = current_user.races.order(:race_day)
+    @races = current_user.races.order(:race_day).reverse_order
 
     render json: @races
   end
