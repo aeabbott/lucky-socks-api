@@ -1,11 +1,14 @@
 [![General Assembly Logo](https://camo.githubusercontent.com/1a91b05b8f4d44b5bbfb83abac2b0996d8e26c92/687474703a2f2f692e696d6775722e636f6d2f6b6538555354712e706e67)](https://generalassemb.ly/education/web-development-immersive)
 
 # rails-api-template
+Link to app: https://aeabbott.github.io/lucky-socks-client/
+Link to client repo:https://github.com/aeabbott/lucky-socks-client
+Link to deployed backend: https://polar-dusk-38066.herokuapp.com/
 
 ## ERD
 link to ERD:
 http://imgur.com/a/Du2le
-1. dotted line represents R1 
+1. dotted line represents R1
 ## Dependencies
 
 Install with `bundle install`.
@@ -45,38 +48,189 @@ version of Rails 4, as well as track `master` branches for `rails-api` and
     db:nuke_pave`.
 1.  Run the API server with `bin/rails server` or `bundle exec rails server`.
 
-## Structure
 
-This template follows the standard project structure in Rails 4.
-
-`curl` command scripts are stored in [`scripts`](scripts) with names that
-correspond to API actions.
-
-User authentication is built-in.
-
-## Tasks
-
-Developers should run these often!
-
--   `bin/rake routes` lists the endpoints available in your API.
--   `bin/rake test` runs automated tests.
--   `bin/rails console` opens a REPL that pre-loads the API.
--   `bin/rails db` opens your database client and loads the correct database.
--   `bin/rails server` starts the API.
--   `scripts/*.sh` run various `curl` commands to test the API. See below.
-
-<!-- TODO -   `rake nag` checks your code style. -->
-<!-- TODO -   `rake lint` checks your code for syntax errors. -->
 
 ## API
 
-Use this as the basis for your own API documentation. Add a new third-level
-heading for your custom entities, and follow the pattern provided for the
-built-in user authentication documentation.
+The Race section outlines the CRUD actions you can perform against /races.
 
-Scripts are included in [`scripts`](scripts) to test built-in actions. Add your
-own scripts to test your custom API. As an alternative, you can write automated
-tests in RSpec to test your API.
+The Authenticate section outlines the CRUD actions you can perform against /users.
+
+All race API actions require a TOKEN. You must authenticate your user first via
+the authentication portion of the API before you can CRUD against /races.
+
+### Races
+
+| Verb   | URI Pattern            | Controller#Action |
+|--------|------------------------|-------------------|
+| POST   | `/races`               | `races#create`    |
+| GET    | `/races`               | `races#index`     |
+| GET    | `/races/:id`           | `races#show`      |
+| PATCH  | `/races/:id`           | `races#update`    |
+| DELETE | `/races/:id`           | `racess#destroy`  |
+
+
+### POST /races
+
+Request:
+```sh
+TOKEN=BAhJIiU2NDMyNjU4NTkzMDAwMDgwZjU1OGUwZmQ1M2EyNTI0ZAY6BkVG--a9912be5924908a52914a0912bcacf13356de33d
+API="${API_ORIGIN:-http://localhost:4741}"
+URL_PATH="/races"
+curl "${API}${URL_PATH}" \
+  --include \
+  --request POST \
+  --header "Content-Type: application/json" \
+  --header "Authorization: Token token=$TOKEN" \
+  --data '{
+    "race": {
+      "name": "Race Name",
+      "distance":"13.1",
+      "time": "183921",
+      "race_day":"2017-02-15",
+      "location":"race location"
+    }
+  }'
+```
+
+Response:
+```sh
+HTTP/1.1 201 Created
+X-Frame-Options: SAMEORIGIN
+X-XSS-Protection: 1; mode=block
+X-Content-Type-Options: nosniff
+Location: http://localhost:4741/races/81
+Content-Type: application/json; charset=utf-8
+ETag: W/"aeebc76d25a0f48fed4c06c5dd61850b"
+Cache-Control: max-age=0, private, must-revalidate
+X-Request-Id: e32e455e-1ea3-4467-a1f0-2851ffcce5d3
+X-Runtime: 0.020679
+Vary: Origin
+Transfer-Encoding: chunked
+
+{"race":{"id":81,"name":"Race Name","distance":13.1,"time":183921,"race_day":"2017-02-15","location":"race location","race_pace":"233:59 min/mi"}}
+```
+
+### GET /races
+
+Request:
+
+```sh
+TOKEN=BAhJIiU4ZjI2MzlhMjZkNmI1NTU0OGNhYzBhMTNmZTcyNjUzZAY6BkVG--f4aed2b5cd6b780adc44919fa509ab0d91e78825
+curl --include --request GET http://localhost:4741/races \
+--header "Authorization: Token token=$TOKEN"\
+```
+Response
+
+```sh
+HTTP/1.1 200 OK
+X-Frame-Options: SAMEORIGIN
+X-XSS-Protection: 1; mode=block
+X-Content-Type-Options: nosniff
+Content-Type: application/json; charset=utf-8
+ETag: W/"3bf221f73aabbe0ab78f0c8b8e1b77a3"
+Cache-Control: max-age=0, private, must-revalidate
+X-Request-Id: d29d080f-ca48-411d-b00e-3c8e78e74417
+X-Runtime: 0.007881
+Vary: Origin
+Transfer-Encoding: chunked
+
+{"races":[{"id":80,"name":null,"distance":3.1,"time":1500,"race_day":"2019-05-15","location":"kfdajfkajfk","race_pace":"8:3 min/mi"},{"id":36,"name":"Filler Name","distance":26.2,"time":12946,"race_day":"2017-05-21","location":"Martha's Vineayard","race_pace":"8:14 min/mi"},{"id":79,"name":null,"distance":3.1,"time":1500,"race_day":"2017-05-15","location":"dajkfajkf","race_pace":"8:3 min/mi"},{"id":75,"name":null,"distance":3.1,"time":1380,"race_day":"2017-04-15","location":"Newton","race_pace":"7:25 min/mi"},{"id":81,"name":"Race Name","distance":13.1,"time":183921,"race_day":"2017-02-15","location":"race location","race_pace":"233:59 min/mi"},{"id":60,"name":null,"distance":3.1,"time":1500,"race_day":"2015-09-15","location":"Newton","race_pace":"8:3 min/mi"}]}
+```
+
+### GET races/:id
+
+Request:
+
+```sh
+TOKEN=BAhJIiU4ZjI2MzlhMjZkNmI1NTU0OGNhYzBhMTNmZTcyNjUzZAY6BkVG--f4aed2b5cd6b780adc44919fa509ab0d91e78825
+curl --include --request GET http://localhost:4741/races/27 \
+  --header "Authorization: Token token=$TOKEN"
+```
+
+Response:
+```sh
+HTTP/1.1 200 OK
+X-Frame-Options: SAMEORIGIN
+X-XSS-Protection: 1; mode=block
+X-Content-Type-Options: nosniff
+Content-Type: application/json; charset=utf-8
+ETag: W/"6d69efd717ed9d0464978bedd6640130"
+Cache-Control: max-age=0, private, must-revalidate
+X-Request-Id: 77f16159-5ce0-43e3-85e1-b97caced3c71
+X-Runtime: 0.006136
+Vary: Origin
+Transfer-Encoding: chunked
+
+{"race":{"id":27,"name":"Filler Name","distance":3.1,"time":1380,"race_day":"2017-02-15","location":"Newton","race_pace":"7:25 min/mi"}}
+```
+
+### PATCH race/:id
+
+Request:
+
+```sh
+ID=27
+TOKEN=BAhJIiU4ZjI2MzlhMjZkNmI1NTU0OGNhYzBhMTNmZTcyNjUzZAY6BkVG--f4aed2b5cd6b780adc44919fa509ab0d91e78825
+curl --include --request PATCH http://localhost:4741/races/$ID \
+  --header "Content-Type: application/json" \
+  --header "Authorization: Token token=$TOKEN"\
+  --data '{
+    "race": {
+      "name": "Updated Name",
+      "distance":"26.2",
+      "time": "3218",
+      "run_date":"2017-03-15",
+      "location":"updated location"
+    }
+  }'
+  ```
+
+  ```sh
+  HTTP/1.1 200 OK
+X-Frame-Options: SAMEORIGIN
+X-XSS-Protection: 1; mode=block
+X-Content-Type-Options: nosniff
+Content-Type: application/json; charset=utf-8
+ETag: W/"4511f44ec21624721c67fe8ee130ceb5"
+Cache-Control: max-age=0, private, must-revalidate
+X-Request-Id: b0169bc5-8184-452d-8193-a34ed5a781e9
+X-Runtime: 0.015862
+Vary: Origin
+Transfer-Encoding: chunked
+
+{"race":{"id":27,"name":"Updated Name","distance":26.2,"time":3218,"race_day":"2017-02-15","location":"updated location","race_pace":"2:2 min/mi"}}
+```
+
+### DELETE race/:id
+
+Request:
+
+``` sh
+TOKEN=BAhJIiU4ZjI2MzlhMjZkNmI1NTU0OGNhYzBhMTNmZTcyNjUzZAY6BkVG--f4aed2b5cd6b780adc44919fa509ab0d91e78825
+curl --include --request GET http://localhost:4741/races/27 \
+  --header "Authorization: Token token=$TOKEN"
+```
+
+Response:
+
+``` sh
+HTTP/1.1 200 OK
+X-Frame-Options: SAMEORIGIN
+X-XSS-Protection: 1; mode=block
+X-Content-Type-Options: nosniff
+Content-Type: application/json; charset=utf-8
+ETag: W/"4511f44ec21624721c67fe8ee130ceb5"
+Cache-Control: max-age=0, private, must-revalidate
+X-Request-Id: 14336c8a-fe64-45a3-89b2-9c86f2fc5c83
+X-Runtime: 0.003856
+Vary: Origin
+Transfer-Encoding: chunked
+
+{"race":{"id":27,"name":"Updated Name","distance":26.2,"time":3218,"race_day":"2017-02-15","location":"updated location","race_pace":"2:2 min/mi"}}
+
+```
+
 
 ### Authentication
 
